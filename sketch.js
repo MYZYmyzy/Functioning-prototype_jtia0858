@@ -12,6 +12,13 @@ function setup() {
   noLoop(); // Ensure draw() is called only once
 }
 
+function draw() {
+  background(255);
+  drawGrid();
+  drawLines();
+  drawRectangles(); 
+  drawSingleGrids(); 
+}
 
 //  draw grid lines
 function drawGrid() {
@@ -529,8 +536,7 @@ function draw() {
   drawLines();
   drawRectangles();
   drawSingleGrids();
-}
-
+}  
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   canvasSize = min(windowWidth, windowHeight);
