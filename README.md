@@ -9,7 +9,7 @@
 # Insight
 *I was inspired by singers' concerts where there are flashing lights to set off the music, so I wanted to reflect the blinking feature.*
 
-![An image of vocal recital](https://simple.wikipedia.org/wiki/Concert#/media/File:Classical_spectacular10.jpg)
+![An image of vocal recital](image.png)
 
 # Technical description
 *I used week10 and week11 lecture and Tutorial content，and I added code related to audio*
