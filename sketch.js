@@ -660,15 +660,14 @@ function updateGrid(spectrum) {
   }
 }
   
-function draw() {
-  background(255);
-  drawGrid();
-  drawLines();
-  drawRectangles();
-  drawSingleGrids();
-}  
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-  canvasSize = min(windowWidth, windowHeight);
-  draw(); 
+function colorFromAmplitude(amplitude) {
+  return color(random(255), random(255), random(255), map(amplitude, 0, 255, 100, 255));
+}
+
+function play_pause() {
+  if (song.isPlaying()) {
+    song.pause();
+  } else {
+    song.loop();
+  }
 }
