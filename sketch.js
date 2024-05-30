@@ -1,6 +1,6 @@
 let song;
 let fft;
-let numBins = 128;
+let numBins = 512;
 let grid = [];
 let cols, rows;
 let rectWidth, rectHeight;
