@@ -1,23 +1,58 @@
-let gridSize = 50;
+let song;
+let fft;
+let numBins = 128;
+let grid = [];
+let cols, rows;
+let rectWidth, rectHeight;
 let canvasSize = 800;
+let gridSize = 50;
 
 let yellow = '#ffd800'
 let red = '#A2362A'
 let gray = '#DADBD5'
 let blue = '#4B66C1'
 
-function setup() {
-  createCanvas(canvasSize, canvasSize);
-  canvasSize = min(windowWidth, windowHeight);
-  noLoop(); // Ensure draw() is called only once
+//  Load Audio
+function preload() {
+  song = loadSound("assets/Vienna Radio Symphony Orchestra - Une petite musique de nuit in G Major.wav");
 }
+
+function setup() {
+  canvasSize = min(windowWidth, windowHeight);
+  createCanvas(canvasSize, canvasSize);    
+  fft = new p5.FFT(0.8, numBins);//  Initialising the FFT
+  song.connect(fft);
+
+  cols = 50;
+  rows = 50;
+  rectWidth = width / cols;
+  rectHeight = height / rows;
+
+  for (let i = 0; i < cols; i++) {
+    grid[i] = [];
+    for (let j = 0; j < rows; j++) {
+      grid[i][j] = color(255);
+    }
+  }
+
+//  Add Audio Switch
+  button = createButton('Play/Pause');
+  button.position(10, 10);
+  button.mousePressed(play_pause);
+}
+
 
 function draw() {
   background(255);
   drawGrid();
   drawLines();
-  drawRectangles(); 
-  drawSingleGrids(); 
+  // Distinguish between different states after audio switching
+  if (song.isPlaying()) {
+    let spectrum = fft.analyze();
+    updateGrid(spectrum);
+  } else {
+    drawInitialGrid();
+  }
 }
 
 //  draw grid lines
@@ -66,21 +101,15 @@ function getIntersectingGrids(x1, y1, x2, y2) {
 function fillGrid(x, y, color) {
   fill(color);
   noStroke();
-  rect(x * (canvasSize / gridSize), y * (canvasSize / gridSize), canvasSize / gridSize, canvasSize / gridSize);
+  rect(x * rectWidth, y * rectHeight, rectWidth, rectHeight);
 }
 
-//  Draw line
 function drawLine(x1, y1, x2, y2, color) {
   let intersectingGrids = getIntersectingGrids(x1, y1, x2, y2);
   for (let coord of intersectingGrids) {
     let [x, y] = coord.split(',').map(Number);
     fillGrid(x, y, color);
   }
-
-  // Auxiliary line
-  // stroke(0);
-  // strokeWeight(2);
-  // line(x1, y1, x2, y2);
 }
 
 function drawTestLine() {
@@ -88,22 +117,19 @@ function drawTestLine() {
   let startY = 0;
   let endX = 400;
   let endY = 600;
-
   drawLine(startX, startY, endX, endY, yellow);
 }
 
-function drawLines(){
-  // whole lines
-  let x1s = [3,6,11,26,42,48]
+function drawLines() {
+  let x1s = [3,6,11,26,42,48];
   for (let i = 0; i < x1s.length; i++) {
     drawLine(x1s[i], 0, x1s[i], 50, yellow);
   }
-  let y1s = [1,8,17,21,27,30,42,47,]
+  let y1s = [1,8,17,21,27,30,42,47];
   for (let i = 0; i < y1s.length; i++) {
     drawLine(0, y1s[i], 50, y1s[i], yellow);
   }
-  // vertical partial lines
-  // let vps = [1,28,31,44,46];
+
   let vps = [
     [1,0,1,y1s[2]], 
     [28,0,28,y1s[2]], 
@@ -129,7 +155,6 @@ function drawLines(){
     drawLine(hp[0], hp[1], hp[2], hp[3],yellow);
   }
 }
-
 
 function drawRectangle(x1, y1, x2, y2, color) {
   fill(color);
