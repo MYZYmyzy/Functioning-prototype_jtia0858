@@ -8,6 +8,7 @@ let blue = '#4B66C1'
 
 function setup() {
   createCanvas(canvasSize, canvasSize);
+  canvasSize = min(windowWidth, windowHeight);
   noLoop(); // Ensure draw() is called only once
 }
 
@@ -15,6 +16,8 @@ function draw() {
   background(255);
   drawGrid();
   drawLines();
+  drawRectangles(); 
+  drawSingleGrids(); 
 }
 
 //  draw grid lines
@@ -534,3 +537,8 @@ function draw() {
   drawRectangles();
   drawSingleGrids();
 }  
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  canvasSize = min(windowWidth, windowHeight);
+  draw(); 
+}
