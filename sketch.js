@@ -537,6 +537,7 @@ function draw() {
   drawRectangles();
   drawSingleGrids();
 }  
+
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
   canvasSize = min(windowWidth, windowHeight);
