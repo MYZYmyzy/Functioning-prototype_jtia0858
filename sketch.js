@@ -66,28 +66,31 @@ function drawGrid() {
   }
 }
 
-// Get coordinates based on line segments
+// Get coordinates based on line segments,Calculate all grid cells that pass in a straight line from a starting point (x1, y1) to an ending point (x2, y2).
+// from chatgpt and https://stackoverflow.com/questions/4672279/bresenham-algorithm-in-javascript
 function getIntersectingGrids(x1, y1, x2, y2) {
   let intersectingGrids = [];
-  let x1Idx = x1;
-  let y1Idx = y1;
-  let x2Idx = x2;
-  let y2Idx = y2;
+  let x1Idx = x1;// Horizontal coordinate of the current point, initialized to the starting point x1
+  let y1Idx = y1;// Vertical coordinate of the current point, initialized to the starting point y1
+  let x2Idx = x2;// Horizontal coordinate of the end point
+  let y2Idx = y2;// the vertical coordinate of the end point
 
-  let dx = Math.abs(x2Idx - x1Idx);
-  let dy = Math.abs(y2Idx - y1Idx);
-  let sx = x1Idx < x2Idx ? 1 : -1;
-  let sy = y1Idx < y2Idx ? 1 : -1;
-  let err = dx - dy;
-
+  let dx = Math.abs(x2Idx - x1Idx); // Calculate the absolute value of the horizontal distance
+  let dy = Math.abs(y2Idx - y1Idx);// Calculate the absolute value of the vertical distance
+  let sx = x1Idx < x2Idx ? 1 : -1; // Determine the horizontal step direction, if x1 is less than x2 then the step is positive, otherwise it is negative
+  let sy = y1Idx < y2Idx ? 1 : -1;// Determine the vertical stepping direction, if y1 is less than y2 then the stepping is positive, otherwise it is negative
+  let err = dx - dy;// Initialize the error term, used to determine if the next point is a horizontal or vertical step
+// loop until it reaches the end point
   while (true) {
     intersectingGrids.push(`${x1Idx},${y1Idx}`);
-    if (x1Idx === x2Idx && y1Idx === y2Idx) break;
-    let e2 = err * 2;
+    if (x1Idx === x2Idx && y1Idx === y2Idx) break;// If the current point has reached the end, exit the loop.
+    let e2 = err * 2;// Calculate twice the error term, which is used to determine the next step direction
+    // if error term is greater than negative vertical distance
     if (e2 > -dy) {
       err -= dy;
       x1Idx += sx;
     }
+    // if error term is less than horizontal distance
     if (e2 < dx) {
       err += dx;
       y1Idx += sy;
@@ -606,6 +609,7 @@ function updateGrid(spectrum) {
     [8.5, 39, 10, 40.2],
     [21, 48, 25, 49.8],
   ];
+  //Calculate the range to determine the colour
   for (let rect of rectangles) {
     let x1 = rect[0];
     let y1 = rect[1];
@@ -617,6 +621,7 @@ function updateGrid(spectrum) {
     drawRectangle(x1, y1, x2, y2, color);
   }
 
+  //Copy the coordinates to be transformed
   let singleGrids = [
     [3, 0], [11, 0], [26, 0], [44, 0], [48, 0],
     [1, 1], [7.5, 1], [10, 1], [16.5, 1], [25, 1], [27, 1], [29, 1], [35, 1], [36, 1], [41, 1], [42, 1], [44, 1], [46, 1], [47, 1], [49, 1],
@@ -675,6 +680,8 @@ function colorFromAmplitude(amplitude) {
   return color(random(255), random(255), random(255), map(amplitude, 0, 255, 100, 255));
 }
 
+    //we can use song.play() here if we want the song to play once
+    //In this case, we want the song to loop, so we call song.loop()
 function play_pause() {
   if (song.isPlaying()) {
     song.pause();
