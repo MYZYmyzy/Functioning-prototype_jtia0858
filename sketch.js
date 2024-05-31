@@ -99,17 +99,23 @@ function getIntersectingGrids(x1, y1, x2, y2) {
 
 // Fill in the grid
 function fillGrid(x, y, color) {
-  fill(color);
-  noStroke();
+  fill(color);//Fill Color
+  noStroke();//No stroke
   rect(x * rectWidth, y * rectHeight, rectWidth, rectHeight);
-}
+}//The xy coordinates are multiplied by the grid height and width.The height and width of each grid.
 
+//  Draw line
 function drawLine(x1, y1, x2, y2, color) {
   let intersectingGrids = getIntersectingGrids(x1, y1, x2, y2);
   for (let coord of intersectingGrids) {
     let [x, y] = coord.split(',').map(Number);
     fillGrid(x, y, color);
   }
+
+    // Auxiliary line
+  // stroke(0);
+  // strokeWeight(2);
+  // line(x1, y1, x2, y2);
 }
 
 function drawTestLine() {
@@ -121,6 +127,7 @@ function drawTestLine() {
 }
 
 function drawLines() {
+    // Draw the entire line
   let x1s = [3,6,11,26,42,48];
   for (let i = 0; i < x1s.length; i++) {
     drawLine(x1s[i], 0, x1s[i], 50, yellow);
@@ -130,6 +137,7 @@ function drawLines() {
     drawLine(0, y1s[i], 50, y1s[i], yellow);
   }
 
+  // vertical partial lines
   let vps = [
     [1,0,1,y1s[2]], 
     [28,0,28,y1s[2]], 
@@ -144,6 +152,7 @@ function drawLines() {
     drawLine(vp[0], vp[1], vp[2], vp[3],yellow);
   }
 
+    // Draw a partial horizontal line
   let hps = [
     [0,44,3,44],
     [0,38,3,38],
@@ -166,6 +175,7 @@ function drawRectangle(x1, y1, x2, y2, color) {
 
 function drawRectangles() {
   let rectangles = [
+    // [Upper left corner x, upper left corner y, lower right corner x, lower right corner y, color]
     [7, 3, 11, 5, yellow],
     [8, 2, 10, 8, red], 
     [8, 5, 10, 6, gray], 
@@ -208,6 +218,7 @@ function drawRectangles() {
 
 function drawSingleGrids() {
   //Single grid coloring - 0
+    //[column, row, color]
   fillGrid(3,0,red);
   fillGrid(11,0,red);
   fillGrid(26,0,red);
@@ -670,4 +681,12 @@ function play_pause() {
   } else {
     song.loop();
   }
+}
+//  WindowResized
+function windowResized() {
+  canvasSize = min(windowWidth, windowHeight);
+  resizeCanvas(canvasSize, canvasSize);
+  rectWidth = width / cols;
+  rectHeight = height / rows;
+  draw(); 
 }
