@@ -37,7 +37,7 @@ function setup() {
 
 //  Add Audio Switch
   button = createButton('Play/Pause');
-  button.position(10, 10);
+  button.position((width - button.width) / 2, 10);
   button.mousePressed(play_pause);
 }
 
